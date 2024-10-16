@@ -1,21 +1,20 @@
 import React from 'react';
-import LandingPage from './components/LandingPage';
+import VehicleResults from './Components/VehicleResults';
 import Navbar from './components/Navbar';
 import Footer from './Components/Footer';
-import Dashboard from './Components/Dashboard';
+import Dashboard from './Components/LandingPage';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Link } from 'react-router-dom';
-import ResultPage from './Components/ResultPage'
+import WithoutLicenseVehicleResults from './Components/WithoutLicenseVehicles'
 
 function App() {
   return (
     <Router>
       <Navbar />
       <Routes>
-        <Route path='/' element={<LandingPage />} />
-        <Route path='/dashboard' element={<Dashboard />} />
-        <Route path='/results' element={<ResultPage />} />
-
+        <Route path='/vehicle-results' element={<VehicleResults />} />
+        <Route path='/no-license' element={<WithoutLicenseVehicleResults />} />
+        <Route path='/' element={<Dashboard />} />
       </Routes>
       <Footer />      
     </Router>

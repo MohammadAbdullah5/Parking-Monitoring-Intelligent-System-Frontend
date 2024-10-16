@@ -12,7 +12,7 @@ const Navbar = () => {
   return (
     <nav className="sticky top-0 bg-white shadow-lg z-50 w-full py-3 transition duration-300 ease-in-out">
       <div className="container mx-auto flex justify-between items-center">
-        <div className="text-2xl font-bold px-3 text-blue-600">Brand</div>
+        <div className="text-2xl font-bold px-3 text-blue-600">License Plate Detection AI</div>
         <div className="hidden md:flex space-x-6">
           <a href="#home" className="hover:text-blue-600 transition duration-300 ease-in-out">Home</a>
           <a href="#about" className="hover:text-blue-600 transition duration-300 ease-in-out">About</a>

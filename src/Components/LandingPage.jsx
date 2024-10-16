@@ -1,52 +1,89 @@
-import React from "react";
+import React from 'react';
+import Navbar from './Navbar'; // Assuming Navbar is a separate component
 import { Link } from 'react-router-dom';
 
 const LandingPage = () => {
-  const data = [
-    { carNumber: "ABC123", arrivalTime: "08:00 AM", departureTime: "09:00 AM" },
-    { carNumber: "XYZ456", arrivalTime: "09:30 AM", departureTime: "10:30 AM" },
-    { carNumber: "LMN789", arrivalTime: "11:00 AM", departureTime: "12:00 PM" },
-    { carNumber: "PQR012", arrivalTime: "01:00 PM", departureTime: "02:00 PM" },
-    { carNumber: "STU345", arrivalTime: "03:00 PM", departureTime: "04:00 PM" },
-  ];
-
   return (
-    <div className="bg-gray-100 min-h-screen p-10">
-      <h1 className="text-4xl font-bold text-center mb-8 text-blue-600">
-        Car Arrival and Departure Information
-      </h1>
-      <div className="overflow-x-auto rounded-lg shadow-lg">
-        <table className="min-w-full bg-white border border-gray-300 rounded-lg">
-          <thead>
-            <tr className="bg-blue-600 text-white uppercase text-sm leading-normal">
-              <th className="py-4 px-6 text-left">Car Number</th>
-              <th className="py-4 px-6 text-left">Arrival Time</th>
-              <th className="py-4 px-6 text-left">Departure Time</th>
-            </tr>
-          </thead>
-          <tbody className="text-gray-700 text-sm font-light">
-            {data.map((item, index) => (
-              <tr
-                key={index}
-                className="border-b border-gray-300 hover:bg-blue-100 transition duration-200"
-              >
-                <td className="py-4 px-6">{item.carNumber}</td>
-                <td className="py-4 px-6">{item.arrivalTime}</td>
-                <td className="py-4 px-6">{item.departureTime}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+    <div className="bg-gray-100 min-h-screen">
+      {/* Hero Section */}
+      <header className="bg-blue-600 text-white py-20">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <h1 className="text-5xl font-bold mb-4">
+            License Plate Detection System for Parking Areas
+          </h1>
+          <p className="text-lg mb-8">
+            Seamlessly monitor and manage vehicle arrivals and departures in your parking lot, with automatic license plate detection and real-time data.
+          </p>
+          <Link to="/vehicle-results">
+            <button className="px-8 py-3 bg-white text-blue-600 font-semibold rounded-md hover:bg-gray-200 transition">
+              View Vehicle Information
+            </button>
+          </Link>
+        </div>
+      </header>
 
-      {/* button */}
-      <div>
-        <Link to="/results">
-          <button className="mt-10 px-8 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition">
-            Cars which have no number plate
-          </button>
-        </Link>
-      </div>
+      {/* Features Section */}
+      <section className="py-10">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <h2 className="text-4xl font-bold mb-8">Key Features</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              <h3 className="text-2xl font-semibold mb-4">Real-time License Plate Detection</h3>
+              <p className="text-gray-600">
+                Automatically detect the license plates of all arriving and departing vehicles, recording their entry and exit times.
+              </p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              <h3 className="text-2xl font-semibold mb-4">Accurate Time Tracking</h3>
+              <p className="text-gray-600">
+                Record exact timestamps for every vehicle, ensuring accurate time-based recording and better parking management.
+              </p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              <h3 className="text-2xl font-semibold mb-4">Without License Plate Vehicles Detection</h3>
+              <p className="text-gray-600">
+                Record vehicles without license plates and notify parking area management.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works Section */}
+      <section className="bg-gray-200 py-20">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <h2 className="text-4xl font-bold mb-8">How It Works</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              <h3 className="text-2xl font-semibold mb-4">Arrival Detection</h3>
+              <p className="text-gray-600">
+                As a vehicle enters the parking lot, our system automatically detects the license plate and logs the arrival time.
+              </p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              <h3 className="text-2xl font-semibold mb-4">Departure Detection</h3>
+              <p className="text-gray-600">
+                Upon exit, the system captures the license plate again, logging the departure time and calculating the total stay duration.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <h2 className="text-4xl font-bold mb-8">Get Started</h2>
+          <p className="text-lg mb-8">
+            Experience the future of parking management with our License Plate Detection System.
+          </p>
+          <Link to="/vehicle-results">
+            <button className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition">
+              View Vehicle Data
+            </button>
+          </Link>
+        </div>
+      </section>
     </div>
   );
 };
