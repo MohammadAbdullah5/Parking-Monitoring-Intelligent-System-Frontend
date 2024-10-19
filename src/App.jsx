@@ -8,19 +8,27 @@ import { Link } from 'react-router-dom';
 import WithoutLicenseVehicleResults from './Components/WithoutLicenseVehicles'
 import SignIn from './Components/SignIn';
 import SignUp from './Components/SignUp';
+import VehicleManagement from './Components/VehicleManagement';
+import AddVehicle from './Components/AddVehicle';
 
 function App() {
   return (
     <Router>
-      <Navbar />
-      <Routes>
-        <Route path='/vehicle-results' element={<VehicleResults />} />
-        <Route path='/no-license' element={<WithoutLicenseVehicleResults />} />
-        <Route path='/' element={<Dashboard />} />
-        <Route path='/signin' element={<SignIn />}></Route>
-        <Route path='/signup' element={<SignUp />}></Route>
-      </Routes>
-      <Footer />      
+      <div id="root">
+        <Navbar />
+        <main>
+          <Routes>
+            <Route path='/vehicleResults' element={<VehicleResults />} />
+            <Route path='/vehicleDashboard' element={<VehicleManagement />} />
+            <Route path='/addvehicle' element={<AddVehicle />} />
+            <Route path='/no-license' element={<WithoutLicenseVehicleResults />} />
+            <Route path='/' element={<Dashboard />} />
+            <Route path='/signin' element={<SignIn />} />
+            <Route path='/signup' element={<SignUp />} />
+          </Routes>
+        </main>
+        <Footer />      
+      </div>
     </Router>
   );
 }
