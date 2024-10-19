@@ -6,6 +6,8 @@ import Dashboard from './Components/LandingPage';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Link } from 'react-router-dom';
 import WithoutLicenseVehicleResults from './Components/WithoutLicenseVehicles'
+import SignIn from './Components/SignIn';
+import SignUp from './Components/SignUp';
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
         <Route path='/vehicle-results' element={<VehicleResults />} />
         <Route path='/no-license' element={<WithoutLicenseVehicleResults />} />
         <Route path='/' element={<Dashboard />} />
+        <Route path='/signin' element={<SignIn />}></Route>
+        <Route path='/signup' element={<SignUp />}></Route>
       </Routes>
       <Footer />      
     </Router>
