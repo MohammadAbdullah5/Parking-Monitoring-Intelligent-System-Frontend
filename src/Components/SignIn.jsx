@@ -15,7 +15,7 @@ const SignIn = () => {
     };
 
     return (
-        <div className="flex items-center justify-center h-screen bg-gradient-to-r from-teal-400 to-blue-500">
+        <div className="flex items-center justify-center h-screen bg-gray-100">
             <form 
                 onSubmit={handleSubmit}
                 className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md"
