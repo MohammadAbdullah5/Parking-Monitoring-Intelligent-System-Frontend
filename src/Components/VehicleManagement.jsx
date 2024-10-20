@@ -3,9 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
-const vehicles = [{id: 1, licensePlate: 'ABC 123', userEmail: 'abc123@gmail.com'}, 
-    {id: 2, licensePlate: 'DEF 456', userEmail: 'def456@gmail.com'}, 
-    {id: 3, licensePlate: 'GHI 789', userEmail: 'ghi789@gmail.com'}
+const vehicles = [{ id: 1, licensePlate: 'ABC 123', userEmail: 'abc123@gmail.com' },
+    { id: 2, licensePlate: 'DEF 456', userEmail: 'def456@gmail.com' },
+    { id: 3, licensePlate: 'GHI 789', userEmail: 'ghi789@gmail.com' }
 ]
 
 const ManageVehicles = () => {
@@ -20,7 +20,6 @@ const ManageVehicles = () => {
 
     const handleConfirmDelete = () => {
         if (confirmDelete.vehicleId) {
-            // Call delete API or function to remove vehicle
             toast.success("Vehicle deleted successfully!");
             setConfirmDelete({ show: false, vehicleId: null });
         }
@@ -33,7 +32,6 @@ const ManageVehicles = () => {
 
     const handleConfirmEdit = () => {
         if (editVehicle.vehicle) {
-            // Call update API or function to update vehicle license plate
             toast.success("Vehicle updated successfully!");
             setEditVehicle({ show: false, vehicle: null });
         }
@@ -61,21 +59,21 @@ const ManageVehicles = () => {
             </div>
 
             {/* Vehicles Table */}
-            <div className="overflow-x-auto">
-                <table className="min-w-full bg-white shadow-lg rounded-lg">
+            <div className="overflow-x-auto rounded-lg shadow-lg">
+                <table className="min-w-full bg-white border border-gray-300 rounded-lg">
                     <thead>
-                        <tr className="bg-gray-100 text-left">
-                            <th className="py-3 px-4 font-semibold">License Plate</th>
-                            <th className="py-3 px-4 font-semibold">User Email</th>
-                            <th className="py-3 px-4 font-semibold">Actions</th>
+                        <tr className="bg-blue-600 text-white uppercase text-sm leading-normal">
+                            <th className="py-4 px-6 text-left">License Plate</th>
+                            <th className="py-4 px-6 text-left">User Email</th>
+                            <th className="py-4 px-6 text-left">Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="text-gray-700 text-sm font-light">
                         {vehicles.map(vehicle => (
-                            <tr key={vehicle.id} className="border-b">
-                                <td className="py-3 px-4">{vehicle.licensePlate}</td>
-                                <td className="py-3 px-4">{vehicle.userEmail}</td>
-                                <td className="py-3 px-4">
+                            <tr key={vehicle.id} className="border-b border-gray-300 hover:bg-blue-100 transition duration-200">
+                                <td className="py-4 px-6">{vehicle.licensePlate}</td>
+                                <td className="py-4 px-6">{vehicle.userEmail}</td>
+                                <td className="py-4 px-6">
                                     {/* Edit and Delete Buttons */}
                                     <button
                                         onClick={() => handleEditClick(vehicle)}

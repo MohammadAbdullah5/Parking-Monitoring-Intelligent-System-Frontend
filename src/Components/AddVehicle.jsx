@@ -75,21 +75,6 @@ const AddVehicle = () => {
             />
           </div>
 
-          {/* User Password Input */}
-          <div className="mb-4">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">User Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={vehicleData.password}
-              onChange={handleInputChange}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              placeholder="Enter User Password"
-              required
-            />
-          </div>
-
           {/* Submit Button */}
           <div className="mb-6">
             <button

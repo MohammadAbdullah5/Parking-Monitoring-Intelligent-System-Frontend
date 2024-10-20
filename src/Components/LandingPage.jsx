@@ -9,14 +9,14 @@ const LandingPage = () => {
       <header className="bg-blue-600 text-white py-20">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <h1 className="text-5xl font-bold mb-4">
-            License Plate Detection System for Parking Areas
+            License Plate Detection System for UET Parking
           </h1>
           <p className="text-lg mb-8">
             Seamlessly monitor and manage vehicle arrivals and departures in your parking lot, with automatic license plate detection and real-time data.
           </p>
-          <Link to="/vehicle-results">
+          <Link to="/signin">
             <button className="px-8 py-3 bg-white text-blue-600 font-semibold rounded-md hover:bg-gray-200 transition">
-              View Vehicle Information
+              Get Started
             </button>
           </Link>
         </div>
@@ -40,9 +40,9 @@ const LandingPage = () => {
               </p>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-lg">
-              <h3 className="text-2xl font-semibold mb-4">Without License Plate Vehicles Detection</h3>
+              <h3 className="text-2xl font-semibold mb-4">Reading Unregistered Vehicles</h3>
               <p className="text-gray-600">
-                Record vehicles without license plates and notify parking area management.
+                Record vehicles not registered in the system.
               </p>
             </div>
           </div>
@@ -67,21 +67,6 @@ const LandingPage = () => {
               </p>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold mb-8">Get Started</h2>
-          <p className="text-lg mb-8">
-            Experience the future of parking management with our License Plate Detection System.
-          </p>
-          <Link to="/vehicle-results">
-            <button className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition">
-              View Vehicle Data
-            </button>
-          </Link>
         </div>
       </section>
     </div>
