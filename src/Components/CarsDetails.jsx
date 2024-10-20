@@ -26,7 +26,7 @@ const CarDetails = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-r from-teal-400 to-blue-500 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
             <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
                 <h2 className="text-2xl font-bold text-center mb-6">Enter Car Details</h2>
                 
