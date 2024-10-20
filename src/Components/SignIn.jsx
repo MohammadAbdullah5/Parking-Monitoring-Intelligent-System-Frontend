@@ -1,242 +1,61 @@
-import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import google from "../assets/google.svg";
-import passwordshow from "../assets/eye.png";
-import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
-import { useDispatch } from "react-redux";
-import {
-  signInStart,
-  signInFailure,
-  signInSuccess,
-} from "../Redux/Slicer";
-import { toast, ToastContainer } from "react-toastify"; // Import toast and ToastContainer
-import "react-toastify/dist/ReactToastify.css"; // Import the CSS for toast notifications
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Use useNavigate from react-router-dom
 
-function SignIn() {
-  const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // State for password visibility
-  const [errorMessage, setErrorMessage] = useState(""); // State for error messages
-  const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
+const SignIn = () => {
+    const navigate = useNavigate(); // Initialize useNavigate for navigation
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setLoading(true); // Show loader on form submission
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // You can add your authentication logic here (e.g., API call).
+        console.log("Email:", email, "Password:", password);
+        // After successful authentication, you can redirect the user
+        navigate('/dashboard'); // Use navigate to redirect
+    };
 
-    try {
-      dispatch(signInStart());
-      const response = await fetch(
-        "https://backend-qyb4mybn.b4a.run/api/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-        }
-      );
-
-      const data = await response.json(); // Store the response in a variable
-
-      if (!response.ok) {
-        dispatch(signInFailure(data.error));
-       toast.error(data.message); // Error toast
-
-      } else {
-        console.log("Success:", data.data);
-        dispatch(signInSuccess(data.data));
-        toast.success("Login successful!"); // Success toast
-        // navigate("/profile", { state: { user: data.data } });
-        // condtional randoring
-        if (data.data.user_type === "service provider") {
-          navigate("/profile", { state: { user: data.data } });
-        } else {
-          navigate("/services", { state: { user: data.data } });
-        }  
-      }
-    } catch (error) {
-      dispatch(signInFailure(error));
-      setErrorMessage(error.message); // Set error message to display
-      toast.error(error.message || "Login failed"); // Error toast
-      console.error("Error:", error);
-    } finally {
-      setLoading(false); // Hide loader after request completes
-    }
-  };
-
-  const handlePasswordShow = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const handleGoogleSignIn = async (credentialResponse) => {
-    const { credential } = credentialResponse;
-    console.log("Google sign-in response:", credential);
-    try {
-      dispatch(signInStart());
-      const response = await fetch(
-        "https://backend-qyb4mybn.b4a.run/auth/google",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ token: credential }),
-        }
-      );
-
-      const data = await response.json();
-      if (response.ok) {
-        dispatch(signInSuccess(data.user));
-        toast.success("Google sign-in successful!"); // Success toast
-        console.log("User signed in:", data.user);
-        if (data.user.user_type === "service provider") {
-          navigate("/profile", { state: { user: data.user } });
-        } else {
-          navigate("/services", { state: { user: data.user } });
-        }  
-      } else {
-        toast.error(data.message || "Google sign-in failed"); // Error toast
-      }
-    } catch (error) {
-      dispatch(signInFailure(error));
-      toast.error("Google sign-in failed"); // Error toast
-      console.error("Error during Google sign-in:", error);
-    }
-  };
-
-  return (
-    <GoogleOAuthProvider clientId="697063750023-7nha10stlk2j37gijq3p2kvgbmpmpu9r.apps.googleusercontent.com">
-      <main className="flex justify-center items-center bg-gray-50 p-4 min-h-screen">
-        {/* Toast Container */}
-        <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} />
-
-        <form className="bg-white shadow-lg p-6 sm:p-8 rounded-lg w-full max-w-sm sm:max-w-md">
-          <h3 className="mb-6 font-semibold text-black text-center text-xl sm:text-2xl">
-            Log in to Your Account
-          </h3>
-
-          {/* Username or Email Field */}
-          <div className="relative flex flex-col mb-4">
-            <label
-              htmlFor="username"
-              className="mb-2 font-medium text-gray-700 text-sm sm:text-base"
+    return (
+        <div className="flex items-center justify-center h-screen bg-gradient-to-r from-teal-400 to-blue-500">
+            <form 
+                onSubmit={handleSubmit}
+                className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md"
             >
-              Username or Email
-            </label>
-            <input
-              type="email"
-              id="username"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)} // Controlled input
-              placeholder="Email or phone"
-              className="border-gray-300 p-3 border rounded-lg focus:ring-2 focus:ring-custom-violet w-full text-sm sm:text-base focus:outline-none"
-            />
-          </div>
-
-          {/* Password Field */}
-          <div className="relative flex flex-col mb-4">
-            <label
-              htmlFor="password"
-              className="mb-2 font-medium text-gray-700 text-sm sm:text-base"
-            >
-              Password
-            </label>
-            <div className="relative flex items-center">
-              <input
-                type={showPassword ? "text" : "password"}
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)} // Controlled input
-                placeholder="Type your password"
-                className="border-gray-300 p-3 border rounded-lg focus:ring-2 focus:ring-custom-violet w-full text-sm sm:text-base focus:outline-none pr-10"
-              />
-              <img
-                src={passwordshow}
-                alt="Show password"
-                onClick={handlePasswordShow}
-                className="absolute right-3 w-5 h-5 cursor-pointer"
-              />
-            </div>
-          </div>
-
-          <button
-            type="submit" // Change type to submit
-            onClick={handleLogin} // Add onClick handler
-            className="bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-full w-full text-sm text-white sm:text-base transition-colors flex justify-center items-center"
-            disabled={loading} // Disable the button while loading
-          >
-            {loading ? (
-              <>
-                <svg
-                  className="animate-spin h-5 w-5 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
+                <h2 className="text-2xl font-bold text-center mb-4">Sign In</h2>
+                <div className="mb-4">
+                    <label className="block text-gray-700" htmlFor="email">Email</label>
+                    <input
+                        type="email"
+                        name="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded"
+                        required
+                    />
+                </div>
+                <div className="mb-4">
+                    <label className="block text-gray-700" htmlFor="password">Password</label>
+                    <input
+                        type="password"
+                        name="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded"
+                        required
+                    />
+                </div>
+                <button 
+                    type="submit"
+                    className="w-full bg-teal-500 text-white p-2 rounded hover:bg-teal-600 transition duration-300"
                 >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                  ></path>
-                </svg>
-                <span className="ml-2">Logging In...</span>{" "}
-                {/* Change text to "Logging In..." */}
-              </>
-            ) : (
-              "Log In" // Change text to "Log In"
-            )}
-          </button>
-
-          <div className="flex items-center my-6 text-gray-500 text-xs sm:text-sm">
-            <div className="bg-gray-300 w-full h-px"></div>
-            <span className="mx-2">or</span>
-            <div className="bg-gray-300 w-full h-px"></div>
-          </div>
-
-          <button className="flex justify-center items-center border-gray-300 bg-white hover:bg-gray-100 mb-2 py-3 border rounded-full w-full text-gray-800 text-sm sm:text-base transition duration-300">
-            <GoogleLogin
-              onSuccess={handleGoogleSignIn}
-              onError={(error) => {
-                toast.error("Google sign-in failed"); // Error toast
-                console.error("Google sign-in failed:", error);
-              }}
-            />
-          </button>
-
-          <div className="mt-6 text-center text-gray-500 text-xs sm:text-sm">
-            Don’t have an account?
-            <Link to="/signup">
-              <span
-                className="ml-1 font-medium hover:underline"
-                style={{ color: "#5433FF" }}
-              >
-                Sign Up now
-              </span>
-            </Link>
-          </div>
-        </form>
-      </main>
-
-      {/* Footer */}
-      <footer className="bg-indigo-600 py-4 w-full text-white">
-        <div className="mx-auto text-center container">
-          <p className="text-xs sm:text-sm">
-            © 2024 Your App. All rights reserved.
-          </p>
+                    Sign In
+                </button>
+                <p className="text-center mt-4">
+                    Don't have an account? 
+                    <a href="/signup" className="text-teal-500 hover:underline"> Sign Up</a>
+                </p>
+            </form>
         </div>
-      </footer>
-    </GoogleOAuthProvider>
-  );
-}
+    );
+};
 
 export default SignIn;

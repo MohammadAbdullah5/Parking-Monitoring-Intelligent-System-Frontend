@@ -10,6 +10,8 @@ import SignIn from './Components/SignIn';
 import SignUp from './Components/SignUp';
 import VehicleManagement from './Components/VehicleManagement';
 import AddVehicle from './Components/AddVehicle';
+import CarsDetails from './Components/CarsDetails';
+import Car from './Components/car';
 
 function App() {
   return (
@@ -25,6 +27,9 @@ function App() {
             <Route path='/' element={<Dashboard />} />
             <Route path='/signin' element={<SignIn />} />
             <Route path='/signup' element={<SignUp />} />
+            <Route path='/car' element={<CarsDetails/>} />
+            <Route path='/car-details' element={<Car/>} />
+            
           </Routes>
         </main>
         <Footer />      
