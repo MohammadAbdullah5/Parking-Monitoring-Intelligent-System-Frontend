@@ -41,7 +41,7 @@ const SignIn = () => {
             >
                 <h2 className="text-2xl font-bold text-center mb-4">Sign In</h2>
                 <div className="mb-4">
-                    <label className="block text-gray-700" htmlFor="email">Plate number</label>
+                    <label className="block text-gray-700" htmlFor="email">E-mail</label>
                     <input
                         type="email"
                         name="email"
