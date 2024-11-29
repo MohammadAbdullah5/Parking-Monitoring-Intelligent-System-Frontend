@@ -7,7 +7,7 @@ const VehicleResults = () => {
 
   const data = [
     { carNumber: "ABC123", arrivalTime: "08:00 AM", departureTime: "09:00 AM", imageUrl: "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=600&q=60" },
-    { carNumber: "XYZ456", arrivalTime: "09:30 AM", departureTime: "10:30 AM", imageUrl: "https://images.unsplash.com/photo-1514869251087-7b1f29f78b2b?auto=format&fit=crop&w=600&q=60" },
+    { carNumber: "XYZ456", arrivalTime: "09:30 AM", departureTime: "10:30 AM", imageUrl: "https://via.placeholder.com/300?text=Car+XYZ456" },
     { carNumber: "LMN789", arrivalTime: "11:00 AM", departureTime: "12:00 PM", imageUrl: "https://via.placeholder.com/300?text=Car+LMN789" },
     { carNumber: "PQR012", arrivalTime: "01:00 PM", departureTime: "02:00 PM", imageUrl: "https://via.placeholder.com/300?text=Car+PQR012" },
     { carNumber: "STU345", arrivalTime: "03:00 PM", departureTime: "04:00 PM", imageUrl: "https://via.placeholder.com/300?text=Car+STU345" },
@@ -59,14 +59,6 @@ const VehicleResults = () => {
         </table>
       </div>
 
-      {/* Button */}
-      <div>
-        <Link to="/no-license">
-          <button className="mt-10 px-8 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition">
-            Cars which have no number plate
-          </button>
-        </Link>
-      </div>
 
       {/* Popup for displaying the car image */}
       {selectedCar && (

@@ -19,7 +19,7 @@ function App() {
         <main>
           <Routes>
             <Route path="/vehicleResults" element={<VehicleResults />} />
-            <Route path="/vehicleDashboard" element={<VehicleManagement />} />
+            <Route path="/dashboard" element={<VehicleManagement />} />
             <Route path="/addVehicle" element={<AddVehicle />} />
             <Route path="/unregisteredVehicles" element={<UnregisteredVehicles />} />
             <Route path="/" element={<LandingPage />} />

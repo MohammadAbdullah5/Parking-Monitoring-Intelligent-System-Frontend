@@ -1,21 +1,40 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Use useNavigate from react-router-dom
+import axios from 'axios'; // Import axios for API calls
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SignIn = () => {
     const navigate = useNavigate(); // Initialize useNavigate for navigation
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        const response = await axios.post(
+            "https://aiparkingsystem-0ihqbt7l.b4a.run/api/v1/users/signin",
+            {
+              email: email,
+              password: password,
+            }
+            // After successful signup, redirect the user to the sign-in page
+          );
+          if (response.status === 200) {
+            localStorage.setItem("user", response.data);
+            console.log(response.data);
+            toast.success("Sign in successful!");
+            response.data.role == "admin" ? navigate("/dashboard") : navigate("/userDashboard"); 
+          } else {
+            toast.error("error:", response.data.message);
+          }
+        }
         // You can add your authentication logic here (e.g., API call).
         console.log("Email:", email, "Password:", password);
-        // After successful authentication, you can redirect the user
-        navigate('/dashboard'); // Use navigate to redirect
-    };
+    
 
     return (
         <div className="flex items-center justify-center h-screen bg-gray-100">
+            <ToastContainer />
             <form 
                 onSubmit={handleSubmit}
                 className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md"
