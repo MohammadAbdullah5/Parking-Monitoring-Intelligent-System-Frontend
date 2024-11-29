@@ -22,7 +22,7 @@ const SignIn = () => {
             >
                 <h2 className="text-2xl font-bold text-center mb-4">Sign In</h2>
                 <div className="mb-4">
-                    <label className="block text-gray-700" htmlFor="email">Email</label>
+                    <label className="block text-gray-700" htmlFor="email">Plate number</label>
                     <input
                         type="email"
                         name="email"
@@ -49,10 +49,10 @@ const SignIn = () => {
                 >
                     Sign In
                 </button>
-                <p className="text-center mt-4">
+                {/* <p className="text-center mt-4">
                     Don't have an account? 
                     <a href="/signup" className="text-teal-500 hover:underline"> Sign Up</a>
-                </p>
+                </p> */}
             </form>
         </div>
     );
