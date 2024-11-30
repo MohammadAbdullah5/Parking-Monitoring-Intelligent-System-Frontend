@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useSelector } from "react-redux";
 
 const UserDashboard = () => {
     const [cars, setCars] = useState([]);
-
+    const { user } = useSelector((state) => state.user);
     useEffect(() => {
         // Replace with your API endpoint to fetch user's cars
-        axios.get('http://localhost:8080/api/user/cars')
+        axios.post('http://localhost:8080/api/user/cars')
             .then(response => {
                 setCars(response.data);
             })

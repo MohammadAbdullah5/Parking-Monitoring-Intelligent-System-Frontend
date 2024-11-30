@@ -43,6 +43,23 @@ const ManageVehicles = () => {
     setConfirmDelete({ show: true, vehicleLicensePlate });
   };
 
+  // deleteadmin
+  const handleDeleteAdmin =async () => {
+    // show model of confirmation
+
+
+    try {
+      await axios.delete(`https://aiparkingsystem-0ihqbt7l.b4a.run/api/v1/users/delete-admin`);
+      toast.success("Admin deleted successfully!");
+      setConfirmDelete({ show: false, vehicleId: null });
+      // navigate("/signin");
+    } catch (error) {
+      console.error("Error deleting admin:", error);
+      toast.error("Failed to delete admin.");
+      setConfirmDelete({ show: false, vehicleId: null })
+    }
+
+  };
   const handleConfirmDelete = async () => {
     if (confirmDelete.vehicleLicensePlate) {
         console.log("Deleting vehicle with license plate:", confirmDelete.vehicleLicensePlate);
@@ -90,6 +107,17 @@ const ManageVehicles = () => {
   return (
     <div className="p-6">
       <ToastContainer />
+
+    {/* show delete button of admin */}
+
+    <div className="mb-6">
+      <button
+        onClick={() => handleDeleteAdmin()}
+        className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600"
+      >
+        Delete Admin
+      </button>
+    </div>
 
       {/* Header and Back Link */}
       <div className="flex justify-between items-center mb-6">
