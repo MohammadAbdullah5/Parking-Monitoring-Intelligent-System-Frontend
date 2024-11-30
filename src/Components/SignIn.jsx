@@ -3,9 +3,12 @@ import { useNavigate } from 'react-router-dom'; // Use useNavigate from react-ro
 import axios from 'axios'; // Import axios for API calls
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import{signInStart, signInSuccess, signInFailure} from '../Redux/Slicer';
+import { useDispatch } from "react-redux";
 
 const SignIn = () => {
     const navigate = useNavigate(); // Initialize useNavigate for navigation
+    const dispatch = useDispatch();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -20,7 +23,8 @@ const SignIn = () => {
             // After successful signup, redirect the user to the sign-in page
           );
           if (response.status === 200) {
-            localStorage.setItem("user", response.data);
+           // localStorage.setItem("user", response.data);
+            dispatch(signInSuccess(response.data));
             console.log(response.data);
             toast.success("Sign in successful!");
             response.data.role == "admin" ? navigate("/dashboard") : navigate("/userDashboard"); 

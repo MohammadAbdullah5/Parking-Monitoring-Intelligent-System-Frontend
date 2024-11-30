@@ -39,7 +39,7 @@ const AddVehicle = () => {
 
     if (response.status === 201) {
       toast.success("Vehicle registered successfully!");
-      navigate("/dashboard");
+      navigate("/userdashboard");
     }
     else {
       toast.error("Vehicle registration failed. Please try again.");
