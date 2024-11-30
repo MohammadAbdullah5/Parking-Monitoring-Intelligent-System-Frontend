@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useDispatch } from "react-redux";
+import { logout } from "../Redux/Slicer";
 
 const vehicles = [
   { id: 1, licensePlate: "ABC 123", userEmail: "abc123@gmail.com" },
@@ -11,6 +13,7 @@ const vehicles = [
 ];
 
 const ManageVehicles = () => {
+  const dispatch = useDispatch();
   const [vehicles, setVehicles] = useState([]);
   const [confirmDelete, setConfirmDelete] = useState({
     show: false,
@@ -49,14 +52,14 @@ const ManageVehicles = () => {
 
 
     try {
-      await axios.delete(`https://aiparkingsystem-0ihqbt7l.b4a.run/api/v1/users/delete-admin`);
+       await axios.delete(`http://localhost:8080/api/v1/users/delete-admin`);
+      dispatch(logout());
       toast.success("Admin deleted successfully!");
-      setConfirmDelete({ show: false, vehicleId: null });
-      // navigate("/signin");
+     
     } catch (error) {
       console.error("Error deleting admin:", error);
       toast.error("Failed to delete admin.");
-      setConfirmDelete({ show: false, vehicleId: null })
+      
     }
 
   };
