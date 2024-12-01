@@ -58,7 +58,7 @@ const ManageVehicles = () => {
 
 
     try {
-       await axios.delete(`"https://aiparkingsystem-0ihqbt7l.b4a.run//api/v1/users/delete-admin`,{
+       await axios.delete(`https://aiparkingsystem-0ihqbt7l.b4a.run/api/v1/users/delete-admin`, {
           headers: {
             Authorization: `Bearer ${token}`, // Include token
           },
