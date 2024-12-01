@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios'; 
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -11,7 +11,8 @@ const AddVehicle = () => {
   });
 
   const navigate = useNavigate();
-
+  const location = useLocation();
+  const currentUser = location.state;
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setVehicleData({
@@ -22,7 +23,7 @@ const AddVehicle = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    const token = currentUser?.token
     // Simple validation checks
     if (!vehicleData.licensePlate || !vehicleData.email) {
       toast.error('All fields are required.');
@@ -32,10 +33,15 @@ const AddVehicle = () => {
     const response = await axios.post(
       "https://aiparkingsystem-0ihqbt7l.b4a.run/api/v1/users/add-vehicle",
       {
-        licensePlate: vehicleData.licensePlate,
-        ownerEmail: vehicleData.email,
+          licensePlate: vehicleData.licensePlate,
+          ownerEmail: vehicleData.email,
+      },
+      {
+          headers: {
+              Authorization: `Bearer ${token}`, // Add token in Authorization header
+          },
       }
-    );
+  );
 
     if (response.status === 201) {
       toast.success("Vehicle registered successfully!");

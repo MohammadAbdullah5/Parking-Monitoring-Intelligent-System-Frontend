@@ -1,16 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../Redux/Slicer";
 
-const vehicles = [
-  { id: 1, licensePlate: "ABC 123", userEmail: "abc123@gmail.com" },
-  { id: 2, licensePlate: "DEF 456", userEmail: "def456@gmail.com" },
-  { id: 3, licensePlate: "GHI 789", userEmail: "ghi789@gmail.com" },
-];
 
 const ManageVehicles = () => {
   const dispatch = useDispatch();
@@ -19,12 +14,17 @@ const ManageVehicles = () => {
     show: false,
     vehicleLicensePlate: null,
   });
+  const location = useLocation()
   const [editVehicle, setEditVehicle] = useState({
     show: false,
     vehicle: null,
   });
   const [newLicensePlate, setNewLicensePlate] = useState("");
   const navigate = useNavigate();
+  const currentUser = location.state?.user;
+  // const currentUser = location.state?.user;
+  const token = currentUser?.token;
+  console.log(currentUser)
 
   useEffect(() => {
     fetchVehicles();
@@ -33,7 +33,12 @@ const ManageVehicles = () => {
   const fetchVehicles = async () => {
     try {
       const response = await axios.get(
-        "https://aiparkingsystem-0ihqbt7l.b4a.run/api/v1/users/view-vehicles"
+        "https://aiparkingsystem-0ihqbt7l.b4a.run/api/v1/users/view-vehicles",
+        {
+          headers: {
+              Authorization: `Bearer ${token}`, // Include token
+          },
+      }
       );
       setVehicles(response.data); // Adjust 'vehicles' based on API response structure
     } catch (error) {
@@ -52,7 +57,11 @@ const ManageVehicles = () => {
 
 
     try {
-       await axios.delete(`http://localhost:8080/api/v1/users/delete-admin`);
+       await axios.delete(`"https://aiparkingsystem-0ihqbt7l.b4a.run//api/v1/users/delete-admin`,{
+          headers: {
+            Authorization: `Bearer ${token}`, // Include token
+          },
+    });
       dispatch(logout());
       toast.success("Admin deleted successfully!");
      
@@ -68,7 +77,12 @@ const ManageVehicles = () => {
         console.log("Deleting vehicle with license plate:", confirmDelete.vehicleLicensePlate);
       try {
         await axios.delete(
-          `https://aiparkingsystem-0ihqbt7l.b4a.run/api/v1/users/delete-vehicle?licensePlate=${confirmDelete.vehicleLicensePlate}`);
+          `https://aiparkingsystem-0ihqbt7l.b4a.run/api/v1/users/delete-vehicle?licensePlate=${confirmDelete.vehicleLicensePlate}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Include token
+            },
+          });
         toast.success("Vehicle deleted successfully!");
         setConfirmDelete({ show: false, vehicleId: null });
         fetchVehicles(); // Refresh the list
@@ -94,7 +108,12 @@ const ManageVehicles = () => {
         };
         await axios.put(
           "https://aiparkingsystem-0ihqbt7l.b4a.run/api/v1/users/update-vehicle",
-          updatedVehicle
+          updatedVehicle,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Include token
+            },
+          }
         );
         toast.success("Vehicle updated successfully!");
         setEditVehicle({ show: false, vehicle: null });
@@ -135,11 +154,9 @@ const ManageVehicles = () => {
 
       {/* Add New Vehicle Button */}
       <div className="mb-6">
-        <Link to="/addvehicle">
-          <button className="bg-custom-violet text-white py-2 px-4 rounded-lg hover:bg-opacity-90">
+          <button className="bg-custom-violet text-white py-2 px-4 rounded-lg hover:bg-opacity-90" onClick={()=> {navigate('/addvehicle', {state: currentUser})}}>
             Add New Vehicle
           </button>
-        </Link>
       </div>
 
       {/* Vehicles Table */}

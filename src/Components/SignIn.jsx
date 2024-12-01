@@ -28,7 +28,7 @@ const SignIn = () => {
             dispatch(signInSuccess(response.data));
             console.log(response.data);
             toast.success("Sign in successful!");
-            response.data.role == "admin" ? navigate("/vehicleDashboard") : navigate("/userDashboard", { state: { user: response.data } }); 
+            response.data.role == "admin" ? navigate("/vehicleDashboard", { state: { user: response.data } }) : navigate("/userDashboard", { state: { user: response.data } }); 
           } else {
             toast.error("error:", response.data.message);
           }

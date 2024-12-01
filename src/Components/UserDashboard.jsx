@@ -9,13 +9,21 @@ const UserDashboard = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const currentUser = location.state?.user;
+    const token = currentUser?.token;
+    console.log(currentUser);
 
     useEffect(() => {
         const fetchCars = async () => {
             try {
-                const response = await axios.post('https://aiparkingsystem-0ihqbt7l.b4a.run/api/v1/users/getCars', {
-                    id: currentUser?._id,
-                });
+                const response = await axios.post(
+                    'https://aiparkingsystem-0ihqbt7l.b4a.run/api/v1/users/getCars',
+                    { id: currentUser?._id },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`, // Include token in the Authorization header
+                        },
+                    }
+                );
                 setCars(response.data.data);
             } catch (error) {
                 console.error('Error fetching cars:', error);
@@ -28,7 +36,13 @@ const UserDashboard = () => {
         try {
             // Sending request to the vehicle details API
             console.log(plate)
-            const response = await axios.get(`https://aiparkingsystem-0ihqbt7l.b4a.run/api/v1/users/vehicle-details/${plate}`)
+            const response = await axios.get(`https://aiparkingsystem-0ihqbt7l.b4a.run/api/v1/users/vehicle-details/${plate}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`, // Include token in the Authorization header
+                    },
+                }
+            )
             navigate('/vehicleDetails', { state: { carDetails: response.data } });
         } catch (error) {
             console.error('Error fetching vehicle details:', error);
