@@ -13,6 +13,8 @@ const AddVehicle = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const currentUser = location.state;
+  const user = currentUser.currentUser;
+  const token = currentUser.currentUser.token
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setVehicleData({
@@ -23,7 +25,6 @@ const AddVehicle = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = currentUser?.token
     // Simple validation checks
     if (!vehicleData.licensePlate || !vehicleData.email) {
       toast.error('All fields are required.');
@@ -45,7 +46,7 @@ const AddVehicle = () => {
 
     if (response.status === 201) {
       toast.success("Vehicle registered successfully!");
-      navigate("/userdashboard");
+      navigate("/vehicledashboard", { state: { user: user } });
     }
     else {
       toast.error("Vehicle registration failed. Please try again.");
@@ -55,7 +56,7 @@ const AddVehicle = () => {
     
     // After success, navigate back to the vehicle dashboard
     setTimeout(() => {
-      navigate('/vehicleDashboard');
+      navigate('/vehicleDashboard', { state: { user: user } });
     }, 1500);
   };
 

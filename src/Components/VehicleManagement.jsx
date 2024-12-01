@@ -21,6 +21,7 @@ const ManageVehicles = () => {
   });
   const [newLicensePlate, setNewLicensePlate] = useState("");
   const navigate = useNavigate();
+  console.log(location.state)
   const currentUser = location.state?.user;
   // const currentUser = location.state?.user;
   const token = currentUser?.token;
@@ -154,7 +155,7 @@ const ManageVehicles = () => {
 
       {/* Add New Vehicle Button */}
       <div className="mb-6">
-          <button className="bg-custom-violet text-white py-2 px-4 rounded-lg hover:bg-opacity-90" onClick={()=> {navigate('/addvehicle', {state: currentUser})}}>
+          <button className="bg-custom-violet text-white py-2 px-4 rounded-lg hover:bg-opacity-90" onClick={()=> {navigate('/addvehicle', {state: { currentUser }})}}>
             Add New Vehicle
           </button>
       </div>
