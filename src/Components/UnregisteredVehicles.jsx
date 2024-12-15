@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import axios from 'axios'
+import axios from 'axios';
 
 const WithoutLicenseVehicleResults = () => {
   const [selectedCar, setSelectedCar] = useState(null);
@@ -11,28 +11,25 @@ const WithoutLicenseVehicleResults = () => {
 
   const [vehicleLogs, setVehicleLogs] = useState([]);
 
-    // Fetch unregistered vehicle logs from the API
-    useEffect(() => {
-      const fetchUnregisteredVehicleLogs = async () => {
-        try {
-          const response = await axios.get('https://aiparkingsystem-0ihqbt7l.b4a.run/api/v1/vehicles/unregistered-logs', {
-            headers: {
-              'Authorization': `Bearer ${token}`, // Include the token for authorization
-            },
-          });
-          
-          // Set the vehicle logs state with the fetched data
-          setVehicleLogs(response.data); // Assuming the API returns an array of logs
-          setLoading(false); // Set loading to false once the data is fetched
-        } catch (error) {
-          console.error("Error fetching unregistered vehicle logs:", error);
-          setLoading(false); // Stop loading in case of error
-        }
-      };
-  
-      fetchUnregisteredVehicleLogs(); // Call the function to fetch data
-    }, [token]);
+  // Fetch unregistered vehicle logs from the API
+  useEffect(() => {
+    const fetchUnregisteredVehicleLogs = async () => {
+      try {
+        const response = await axios.get('https://aiparkingsystem-0ihqbt7l.b4a.run/api/v1/vehicles/unregistered-logs', {
+          headers: {
+            'Authorization': `Bearer ${token}`, // Include the token for authorization
+          },
+        });
 
+        // Set the vehicle logs state with the fetched data
+        setVehicleLogs(response.data); // Assuming the API returns an array of logs
+      } catch (error) {
+        console.error("Error fetching unregistered vehicle logs:", error);
+      }
+    };
+
+    fetchUnregisteredVehicleLogs(); // Call the function to fetch data
+  }, [token]);
 
   const handleRowClick = (car) => {
     setSelectedCar(car);
@@ -41,6 +38,20 @@ const WithoutLicenseVehicleResults = () => {
   // Function to close the popup
   const closePopup = () => {
     setSelectedCar(null);
+  };
+
+  // Helper function to format the arrivalTime into a readable format
+  const formatArrivalTime = (arrivalTime) => {
+    const dateObj = new Date(arrivalTime);
+
+    if (isNaN(dateObj)) {
+      return 'Invalid Date'; // Fallback for invalid date
+    }
+
+    const formattedDate = dateObj.toLocaleDateString('en-US'); // MM/DD/YYYY format
+    const formattedTime = dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }); // HH:mm AM/PM format
+
+    return `${formattedDate} ${formattedTime}`;
   };
 
   return (
@@ -56,14 +67,18 @@ const WithoutLicenseVehicleResults = () => {
               </tr>
             </thead>
             <tbody className="text-gray-700 text-sm font-light">
-              {vehicleLogs.map((item, index) => (
-                <tr 
-                  key={index}
-                  className="border-b border-gray-300 hover:bg-blue-100 transition duration-200">
-                  <td className="py-4 px-6">{item.arrivalTime}</td>
-                  <td className="py-4 px-6">{item.licensePlate}</td>
-                </tr>
-              ))}
+              {vehicleLogs.map((item, index) => {
+                const formattedArrivalTime = formatArrivalTime(item.arrivalTime); // Format arrival time
+                return (
+                  <tr
+                    key={index}
+                    className="border-b border-gray-300 hover:bg-blue-100 transition duration-200"
+                  >
+                    <td className="py-4 px-6">{formattedArrivalTime}</td> {/* Display formatted arrival time */}
+                    <td className="py-4 px-6">{item.licensePlate}</td> {/* Display license plate */}
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

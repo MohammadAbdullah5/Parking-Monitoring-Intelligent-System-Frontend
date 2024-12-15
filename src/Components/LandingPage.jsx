@@ -49,26 +49,6 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* How It Works Section */}
-      <section className="bg-gray-200 py-20">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold mb-8">How It Works</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-lg">
-              <h3 className="text-2xl font-semibold mb-4">Arrival Detection</h3>
-              <p className="text-gray-600">
-                As a vehicle enters the parking lot, our system automatically detects the license plate and logs the arrival time.
-              </p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-lg">
-              <h3 className="text-2xl font-semibold mb-4">Departure Detection</h3>
-              <p className="text-gray-600">
-                Upon exit, the system captures the license plate again, logging the departure time and calculating the total stay duration.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
     </div>
   );
 };
