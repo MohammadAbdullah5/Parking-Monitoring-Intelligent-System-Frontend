@@ -1,18 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import axios from 'axios'
 
 const VehicleResults = () => {
   // State to handle the visibility of the popup and selected car data
   const [selectedCar, setSelectedCar] = useState(null);
-
-  const data = [
-    { carNumber: "ABC123", arrivalTime: "08:00 AM", departureTime: "09:00 AM", imageUrl: "https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=600&q=60" },
-    { carNumber: "XYZ456", arrivalTime: "09:30 AM", departureTime: "10:30 AM", imageUrl: "https://via.placeholder.com/300?text=Car+XYZ456" },
-    { carNumber: "LMN789", arrivalTime: "11:00 AM", departureTime: "12:00 PM", imageUrl: "https://via.placeholder.com/300?text=Car+LMN789" },
-    { carNumber: "PQR012", arrivalTime: "01:00 PM", departureTime: "02:00 PM", imageUrl: "https://via.placeholder.com/300?text=Car+PQR012" },
-    { carNumber: "STU345", arrivalTime: "03:00 PM", departureTime: "04:00 PM", imageUrl: "https://via.placeholder.com/300?text=Car+STU345" },
-  ];
-
+  const navigate = useNavigate(); // Initialize useNavigate
+  const [vehicleLogs, setVehicleLogs] = useState([]);
+  const location = useLocation();
+  console.log(location.state)
+  const currentUser = location.state?.user;
+  console.log(currentUser);
+  const token = currentUser.token;
   // Function to show the popup with the selected car's image
   const handleRowClick = (car) => {
     setSelectedCar(car);
@@ -23,39 +23,72 @@ const VehicleResults = () => {
     setSelectedCar(null);
   };
 
+  useEffect(() => {
+    const fetchVehicleLogs = async () => {
+      try {
+        // Make the API call to fetch registered vehicle logs
+        const response = await axios.get('https://aiparkingsystem-0ihqbt7l.b4a.run/api/v1/vehicles/registered-logs', {
+          headers: {
+            'Authorization': `Bearer ${token}`, // Include the token for authorization
+          },
+        });
+
+        // Update state with fetched vehicle logs
+        setVehicleLogs(response.data); // Assuming the response data contains the logs
+        setLoading(false); // Set loading to false once data is fetched
+      } catch (error) {
+        console.error("Error fetching vehicle logs:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchVehicleLogs(); // Call the function to fetch the data
+  }, [token]);
+
   return (
     <div className="bg-white-100 min-h-screen p-10">
       <h1 className="text-4xl font-bold text-center mb-8 text-blue-600">
         Car Arrival and Departure Information
       </h1>
+      <div className="mb-6 flex justify-center space-x-4">
+        <button
+          className="bg-blue-500 text-white py-2 px-6 rounded-lg shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition-all duration-200 transform hover:scale-105"
+          onClick={() => navigate('/unregisteredVehicles', { state: { user: currentUser } })}
+        >
+          Unregistered Vehicles
+        </button>
+        <button
+          className="bg-green-500 text-white py-2 px-6 rounded-lg shadow-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 transition-all duration-200 transform hover:scale-105"
+          onClick={() => navigate('/vehicleDashboard', { state: { user: currentUser } })}
+        >
+          Go to Dashboard
+        </button>
+      </div>
       <div className="overflow-x-auto rounded-lg shadow-lg">
         <table className="min-w-full bg-white border border-gray-300 rounded-lg">
           <thead>
             <tr className="bg-blue-600 text-white uppercase text-sm leading-normal">
               <th className="py-4 px-6 text-left">Car Number</th>
               <th className="py-4 px-6 text-left">Arrival Time</th>
-              <th className="py-4 px-6 text-left">Departure Time</th>
-              <th className="py-4 px-6 text-left">Vehicle Image</th>
             </tr>
           </thead>
           <tbody className="text-gray-700 text-sm font-light">
-            {data.map((item, index) => (
-              <tr
-                key={index}
-                className="border-b border-gray-300 hover:bg-blue-100 transition duration-200 cursor-pointer"
-                onClick={() => handleRowClick(item)} // Handle row click
-              >
-                <td className="py-4 px-6">{item.carNumber}</td>
-                <td className="py-4 px-6">{item.arrivalTime}</td>
-                <td className="py-4 px-6">{item.departureTime}</td>
-                <td className="py-4 px-6">
-                    <button onClick={() => alert(`Viewing details for car arriving at ${item.arrivalTime}`)}>
-                      <img src={item.imageUrl} alt="View Details" className="w-8 h-8" />
-                    </button>
-                  </td>
-              </tr>
-            ))}
-          </tbody>
+              {vehicleLogs.length > 0 ? (
+                vehicleLogs.map((item, index) => (
+                  <tr
+                    key={index}
+                    className="border-b border-gray-300 hover:bg-blue-100 transition duration-200 cursor-pointer"
+                  >
+                    <td className="py-4 px-6">{item.licensePlate}</td>
+                    <td className="py-4 px-6">{item.arrivalTime}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="3" className="py-4 px-6 text-center">No registered vehicle logs found.</td>
+                </tr>
+              )}
+            </tbody>
         </table>
       </div>
 

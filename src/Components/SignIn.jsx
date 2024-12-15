@@ -24,17 +24,13 @@ const SignIn = () => {
           );
           if (response.status === 200) {
            // localStorage.setItem("user", response.data);
-           console.log(response.data);
             dispatch(signInSuccess(response.data));
-            console.log(response.data);
             toast.success("Sign in successful!");
             response.data.role == "admin" ? navigate("/vehicleDashboard", { state: { user: response.data } }) : navigate("/userDashboard", { state: { user: response.data } }); 
           } else {
             toast.error("error:", response.data.message);
           }
         }
-        // You can add your authentication logic here (e.g., API call).
-        console.log("Email:", email, "Password:", password);
     
 
     return (

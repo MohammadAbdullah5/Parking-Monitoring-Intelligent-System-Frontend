@@ -6,7 +6,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../Redux/Slicer";
 
-
 const ManageVehicles = () => {
   const dispatch = useDispatch();
   const [vehicles, setVehicles] = useState([]);
@@ -14,18 +13,18 @@ const ManageVehicles = () => {
     show: false,
     vehicleLicensePlate: null,
   });
-  const location = useLocation()
+  const [selectedVideo, setSelectedVideo] = useState(null);
+  const [showVideoModal, setShowVideoModal] = useState(false);
+  const location = useLocation();
   const [editVehicle, setEditVehicle] = useState({
     show: false,
     vehicle: null,
   });
   const [newLicensePlate, setNewLicensePlate] = useState("");
   const navigate = useNavigate();
-  console.log(location.state)
   const currentUser = location.state?.user;
   // const currentUser = location.state?.user;
   const token = currentUser?.token;
-  console.log(currentUser)
 
   useEffect(() => {
     fetchVehicles();
@@ -37,9 +36,9 @@ const ManageVehicles = () => {
         "https://aiparkingsystem-0ihqbt7l.b4a.run/api/v1/users/view-vehicles",
         {
           headers: {
-              Authorization: `Bearer ${token}`, // Include token
+            Authorization: `Bearer ${token}`, // Include token
           },
-      }
+        }
       );
       setVehicles(response.data); // Adjust 'vehicles' based on API response structure
     } catch (error) {
@@ -53,29 +52,27 @@ const ManageVehicles = () => {
   };
 
   // deleteadmin
-  const handleDeleteAdmin =async () => {
+  const handleDeleteAdmin = async () => {
     // show model of confirmation
 
-
     try {
-       await axios.delete(`https://aiparkingsystem-0ihqbt7l.b4a.run/api/v1/users/delete-admin`, {
+      await axios.delete(
+        `https://aiparkingsystem-0ihqbt7l.b4a.run/api/v1/users/delete-admin`,
+        {
           headers: {
             Authorization: `Bearer ${token}`, // Include token
           },
-    });
+        }
+      );
       dispatch(logout());
       toast.success("Admin deleted successfully!");
-     
     } catch (error) {
       console.error("Error deleting admin:", error);
       toast.error("Failed to delete admin.");
-      
     }
-
   };
   const handleConfirmDelete = async () => {
     if (confirmDelete.vehicleLicensePlate) {
-        console.log("Deleting vehicle with license plate:", confirmDelete.vehicleLicensePlate);
       try {
         await axios.delete(
           `https://aiparkingsystem-0ihqbt7l.b4a.run/api/v1/users/delete-vehicle?licensePlate=${confirmDelete.vehicleLicensePlate}`,
@@ -83,14 +80,15 @@ const ManageVehicles = () => {
             headers: {
               Authorization: `Bearer ${token}`, // Include token
             },
-          });
+          }
+        );
         toast.success("Vehicle deleted successfully!");
         setConfirmDelete({ show: false, vehicleId: null });
         fetchVehicles(); // Refresh the list
       } catch (error) {
         console.error("Error deleting vehicle:", error);
         toast.error("Failed to delete vehicle.");
-        setConfirmDelete({ show: false, vehicleId: null })
+        setConfirmDelete({ show: false, vehicleId: null });
       }
     }
   };
@@ -127,37 +125,82 @@ const ManageVehicles = () => {
     }
   };
 
+  // Handle video selection
+  const handleVideoChange = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith("video/")) {
+      setSelectedVideo(file);
+    } else {
+      toast.error("Please select a valid video file.");
+    }
+  };
+
+  // Handle video upload
+  const handleUploadVideo = async () => {
+    if (!selectedVideo) {
+      toast.error("No video selected.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("video", selectedVideo);
+
+    try {
+      await axios.post(
+        "http://localhost:8080/api/v1/vehicles/upload-video", // Replace with your backend URL
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include token
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      toast.success("Video uploaded successfully!");
+    } catch (error) {
+      console.error("Error uploading video:", error);
+      toast.error("Failed to upload video.");
+    }
+  };
+
   return (
     <div className="p-6">
       <ToastContainer />
 
-    {/* show delete button of admin */}
+      {/* show delete button of admin */}
 
-    <div className="mb-6">
-      <button
-        onClick={() => handleDeleteAdmin()}
-        className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600"
-      >
-        Delete Admin
-      </button>
-    </div>
+      <div className="mb-6">
+        <button
+          onClick={() => handleDeleteAdmin()}
+          className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600"
+        >
+          Delete Admin
+        </button>
+      </div>
 
       {/* Header and Back Link */}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold">Manage Vehicles</h1>
-        <Link
-          to="/vehicleResults"
+        <button
+          onClick={() =>
+            navigate("/vehicleResults", { state: { user: currentUser } })
+          }
           className="text-custom-violet hover:underline"
         >
-          ← Back to Results
-        </Link>
+          ← Vehicle Logs
+        </button>
       </div>
 
       {/* Add New Vehicle Button */}
       <div className="mb-6">
-          <button className="bg-custom-violet text-white py-2 px-4 rounded-lg hover:bg-opacity-90" onClick={()=> {navigate('/addvehicle', {state: { currentUser }})}}>
-            Add New Vehicle
-          </button>
+        <button
+          className="bg-custom-violet text-white py-2 px-4 rounded-lg hover:bg-opacity-90"
+          onClick={() => {
+            navigate("/addvehicle", { state: { currentUser } });
+          }}
+        >
+          Add New Vehicle
+        </button>
       </div>
 
       {/* Vehicles Table */}
@@ -199,6 +242,22 @@ const ManageVehicles = () => {
         </table>
       </div>
 
+      {/* Video Upload Section */}
+      <div className="mb-6">
+        <input
+          type="file"
+          accept="video/*"
+          onChange={handleVideoChange}
+          className="border p-2 mb-4"
+        />
+        <button
+          onClick={handleUploadVideo}
+          className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600"
+        >
+          Upload Video
+        </button>
+      </div>
+
       {/* Confirmation Delete Pop-up */}
       {confirmDelete.show && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
@@ -226,6 +285,36 @@ const ManageVehicles = () => {
         </div>
       )}
 
+      {showVideoModal && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
+            <h3 className="text-xl font-semibold mb-4">
+              Select a Video to Upload
+            </h3>
+            <input
+              type="file"
+              accept="video/*"
+              onChange={handleVideoChange}
+              className="border p-2 mb-4 w-full"
+            />
+            <div className="flex justify-end">
+              <button
+                onClick={() => setShowVideoModal(false)} // Close modal
+                className="bg-gray-400 text-white py-2 px-4 rounded-lg mr-2"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleUploadVideo}
+                className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600"
+              >
+                Upload
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Edit License Plate Pop-up */}
       {editVehicle.show && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
@@ -241,16 +330,16 @@ const ManageVehicles = () => {
             />
             <div className="flex justify-end">
               <button
-                onClick={() => setEditVehicle({ show: false, vehicle: null })}
+                onClick={() => setShowVideoModal(false)} // Close modal
                 className="bg-gray-400 text-white py-2 px-4 rounded-lg mr-2"
               >
                 Cancel
               </button>
               <button
                 onClick={handleConfirmEdit}
-                className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600"
+                className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600"
               >
-                Confirm
+                Upload
               </button>
             </div>
           </div>

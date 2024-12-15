@@ -43,7 +43,7 @@ const UserDashboard = () => {
                     },
                 }
             )
-            navigate('/vehicleDetails', { state: { carDetails: response.data } });
+            navigate('/vehicleDetails', { state: { carDetails: response.data, t: token } });
         } catch (error) {
             console.error('Error fetching vehicle details:', error);
             alert('Error fetching vehicle details');
